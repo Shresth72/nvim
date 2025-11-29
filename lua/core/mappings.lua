@@ -540,6 +540,20 @@ M.gitsigns = {
     },
 
     -- Actions
+    ["<leader>gh"] = {
+      function()
+        require("gitsigns").stage_hunk()
+      end,
+      "Stage hunk",
+    },
+
+    ["<leader>ga"] = {
+      function()
+        require("gitsigns").stage_buffer()
+      end,
+      "Stage buffer",
+    },
+
     ["<leader>rh"] = {
       function()
         require("gitsigns").reset_hunk()

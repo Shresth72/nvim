@@ -6,3 +6,76 @@ vim.api.nvim_set_hl(0, "TabLineFill", { bg = "#282c34", nocombine = true })
 
 vim.api.nvim_set_hl(0, "StatusLine", { bg = "#1e2326" })
 vim.deprecate = function() end
+
+
+
+
+
+-- Git Commands
+vim.api.nvim_create_user_command("SignedCommit", function(opts)
+  local msg = opts.args
+  if msg == nil or msg == "" then
+    print("Error: Commit message cannot be empty.")
+    return
+  end
+
+  vim.cmd("split | resize 15 | terminal git commit -m '" .. msg .. "'")
+end, {
+  nargs = "+",
+  desc = "Create a signed commit with the provided message",
+})
+
+
+
+
+
+
+
+-- DiffViewer
+vim.api.nvim_create_user_command("DiffView", function(opts)
+  local target = opts.args ~= "" and opts.args or "HEAD"
+  -- Use diff2_horizontal to hide file panel and show ONLY the two diff windows
+  vim.cmd("DiffviewOpen " .. target .. " --imply-local --view diff2_horizontal")
+end, {
+  nargs = "?",
+  desc = "Open Diffview with optional ref (no side panel)"
+})
+
+vim.api.nvim_create_user_command("DiffExit", function()
+  vim.cmd("DiffviewClose")
+end, { desc = "Exit Diffview" })
+
+
+
+
+
+
+-- CollapseJinja: collapse Jinja template blocks by removing whitespace/newlines
+vim.api.nvim_create_user_command("CollapseJinja", function()
+  local start_line, end_line
+
+  local mode = vim.fn.mode()
+  if mode == "v" or mode == "V" or mode == "" then
+    start_line = vim.fn.getpos("'<")[2]
+    end_line = vim.fn.getpos("'>")[2]
+  else
+    start_line = 1
+    end_line = vim.fn.line("$")
+  end
+
+  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+  local text = table.concat(lines, " ")
+
+  text = text
+      :gsub("{%%", "{%%")
+      :gsub("%%}", "%%}")
+      :gsub("{{", "{{")
+      :gsub("}}", "}}")
+      :gsub("%s+", " ")
+      :gsub("%s*{%%", "{%%")
+      :gsub("%%}%s*", "%%}")
+      :gsub("%s*{{", "{{")
+      :gsub("}}%s*", "}}")
+
+  vim.api.nvim_buf_set_lines(0, start_line - 1, end_line, false, { text })
+end, { desc = "Collapse Jinja template into one line" })

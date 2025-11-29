@@ -25,6 +25,26 @@ end, {
   desc = "Create a signed commit with the provided message",
 })
 
+vim.api.nvim_create_user_command("PushToGithub", function(opts)
+  local args = opts.fargs
+
+  if #args == 0 then
+    -- No branch provided → normal push
+    vim.cmd("split | resize 15 | terminal git push")
+    return
+  end
+
+  if #args == 1 then
+    local branch = args[0] or args[1] or args
+    vim.cmd("split | resize 15 | terminal git push --set-upstream origin " .. branch)
+    return
+  end
+
+  print("Error: Too many arguments. Provide zero or one branch name.")
+end, {
+  nargs = "*",
+  desc = "Push normally or set upstream when branch is given",
+})
 
 
 

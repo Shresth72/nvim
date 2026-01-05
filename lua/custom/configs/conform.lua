@@ -5,15 +5,31 @@ local conform_enabled = true
 
 -- wrapper around format_on_save
 conform.setup {
+  -- Custom formatters
+  formatters = {
+    uncrustify = {
+      command = "uncrustify",
+      args = {
+        "-c",
+        vim.fn.expand("~/.config/uncrustify/uncrustify.cfg"),
+        "--no-backup",
+        "--replace",
+        "$FILENAME",
+      },
+      stdin = false,
+    },
+  },
+
   formatters_by_ft = {
+    c = { "uncrustify" },
+    cpp = { "uncrustify" },
+
     lua = { "stylua" },
     javascript = { "prettier" },
     javascriptreact = { "prettier" },
     typescript = { "prettier" },
     typescriptreact = { "prettier" },
     rust = { "rustfmt" },
-    c = { "clang-format" },
-    cpp = { "clang-format" },
     haskell = { "fourmolu" },
     go = { "golines" },
     sh = { "shellharden" },

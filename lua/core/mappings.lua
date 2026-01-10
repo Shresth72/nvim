@@ -95,7 +95,7 @@ M.general = {
     ["<leader>rn"] = { "<cmd> set rnu! <CR>", "Toggle relative number" },
 
     -- Visual Block mode
-    -- ["<leader>z"] = { "<C-v>", "Visual Block mode" },
+    ["<leader>z"] = { "<C-v>", "Visual Block mode" },
 
     -- Insert tab space at the beginning of the line
     ["<C-]>"] = { "^I<Tab><Esc>", "Insert tab at beginning of line" },

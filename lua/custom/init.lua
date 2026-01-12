@@ -1,17 +1,12 @@
 -- vim.opt.colorcolumn = "80"
 vim.opt.relativenumber = true
 
-vim.api.nvim_set_hl(0, "TabLineFill", { bg = "#282c34", nocombine = true })
--- vim.api.nvim_set_hl(0, "TabLineFill", { bg = "none", nocombine = true })
-
+vim.api.nvim_set_hl(0, "TabLineFill", { bg = "#1b1f24", nocombine = true })
 vim.api.nvim_set_hl(0, "StatusLine", { bg = "#1e2326" })
 vim.deprecate = function() end
 
 
-
-
-
--- Git Commands
+--========= GIT COMMANDS ===========
 vim.api.nvim_create_user_command("SignedCommit", function(opts)
   local msg = opts.args
   if msg == nil or msg == "" then
@@ -47,11 +42,7 @@ end, {
 })
 
 
-
-
-
-
--- DiffViewer
+--========= DIFF VIEWERS ===========
 vim.api.nvim_create_user_command("DiffView", function(opts)
   local target = opts.args ~= "" and opts.args or "HEAD"
   -- Use diff2_horizontal to hide file panel and show ONLY the two diff windows
@@ -66,11 +57,7 @@ vim.api.nvim_create_user_command("DiffExit", function()
 end, { desc = "Exit Diffview" })
 
 
-
-
-
-
--- CollapseJinja: collapse Jinja template blocks by removing whitespace/newlines
+--========= COLLAPSE JINJA ===========
 vim.api.nvim_create_user_command("CollapseJinja", function()
   local start_line, end_line
 

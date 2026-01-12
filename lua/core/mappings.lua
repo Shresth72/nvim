@@ -25,64 +25,80 @@ M.general = {
   },
 
   n = {
-    -- Edit instances of word
+    -- navigation
+    ["<M-->"] = {
+      function()
+        require("custom.navigation").back()
+      end
+    },
+    ["<M-=>"] = {
+      function()
+        require("custom.navigation").forward()
+      end
+    },
+
+    -- edit instances of word
     ["<leader>r"] = {
       function()
-        local old_word = vim.fn.input "Replace: "
-        local new_word = vim.fn.input "With: "
+        local old_word = vim.fn.input "replace: "
+        local new_word = vim.fn.input "with: "
         if old_word ~= "" and new_word ~= "" then
           vim.cmd(string.format(".,$s/%s/%s/gc", old_word, new_word))
         else
-          print "Replacement canceled."
+          print "replacement canceled."
         end
       end,
-      "Selective replace in file with confirmation",
+      "selective replace in file with confirmation",
     },
     ["<leader>rm"] = {
       function()
-        local old_word = vim.fn.input "Replace: "
-        local new_word = vim.fn.input "With: "
+        local old_word = vim.fn.input "replace: "
+        local new_word = vim.fn.input "with: "
         if old_word ~= "" and new_word ~= "" then
           vim.cmd(string.format("%%s/%s/%s/g", old_word, new_word))
         else
-          print "Replacement all canceled."
+          print "replacement all canceled."
         end
       end,
-      "Selective replace in whole file (no confirmation)",
+      "selective replace in whole file (no confirmation)",
     },
 
-    -- Shortcut for System.out.println()
+    -- shortcut for system.out.println()
     ["<leader>p"] = {
       function()
         local current_line = vim.fn.getline(".")
         local current_indent = current_line:match("^%s*") or ""
 
-        if current_line:match("%S") then
-          vim.api.nvim_put({ current_indent .. "System.out.println();" }, "l", true, true)
+        if current_line:match("%s") then
+          vim.api.nvim_put({ current_indent .. "system.out.println();" }, "l", true, true)
           vim.cmd "normal! k"
         else
-          vim.api.nvim_set_current_line(current_indent .. "System.out.println();")
+          vim.api.nvim_set_current_line(current_indent .. "system.out.println();")
         end
 
         local current_row, _ = unpack(vim.api.nvim_win_get_cursor(0))
         vim.api.nvim_win_set_cursor(0, { current_row, #current_indent + 19 })
         vim.cmd "startinsert"
       end,
-      "Insert System.out.println() and enter insert mode"
+      "insert system.out.println() and enter insert mode"
     },
 
-    -- Backspace - Back a word
-    ["<BS>"] = { "b", "Move one word back" },
+    -- window resize
+    ["}"] = { ":vertical resize +5<CR>", "Increase current window width", silent = true },
+    ["{"] = { ":vertical resize -5<CR>", "Decrease current window width", silent = true },
 
-    ["<Esc>"] = { "<cmd> noh <CR>", "Clear highlights" },
+    -- backspace - back a word
+    ["<bs>"] = { "b", "move one word back" },
+
+    ["<esc>"] = { "<cmd> noh <cr>", "clear highlights" },
     -- switch between windows
-    ["<C-h>"] = { "<C-w>h", "Window left" },
-    ["<C-l>"] = { "<C-w>l", "Window right" },
-    ["<C-j>"] = { "<C-w>j", "Window down" },
-    ["<C-k>"] = { "<C-w>k", "Window up" },
+    ["<c-h>"] = { "<c-w>h", "window left" },
+    ["<c-l>"] = { "<c-w>l", "window right" },
+    ["<c-j>"] = { "<c-w>j", "window down" },
+    ["<c-k>"] = { "<c-w>k", "window up" },
 
     -- save
-    ["<C-s>"] = { "<cmd> w <CR>", "Save file" },
+    ["<c-s>"] = { "<cmd> w <cr>", "save file" },
 
     -- Copy all
     ["<C-c>"] = { "<cmd> %y+ <CR>", "Copy whole file" },
@@ -237,6 +253,7 @@ M.lspconfig = {
   n = {
     ["gD"] = {
       function()
+        require("custom.navigation").record()
         vim.lsp.buf.declaration()
       end,
       "LSP declaration",
@@ -244,9 +261,18 @@ M.lspconfig = {
 
     ["gd"] = {
       function()
+        require("custom.navigation").record()
         vim.lsp.buf.definition()
       end,
       "LSP definition",
+    },
+
+    ["gr"] = {
+      function()
+        require("custom.navigation").record()
+        vim.lsp.buf.references()
+      end,
+      "LSP references",
     },
 
     ["K"] = {
@@ -258,6 +284,7 @@ M.lspconfig = {
 
     ["gi"] = {
       function()
+        require("custom.navigation").record()
         vim.lsp.buf.implementation()
       end,
       "LSP implementation",
@@ -270,7 +297,7 @@ M.lspconfig = {
       "LSP signature help",
     },
 
-    ["<leader>D"] = {
+    ["<leader>ld"] = {
       function()
         vim.lsp.buf.type_definition()
       end,
@@ -289,13 +316,6 @@ M.lspconfig = {
         vim.lsp.buf.code_action()
       end,
       "LSP code action",
-    },
-
-    ["gr"] = {
-      function()
-        vim.lsp.buf.references()
-      end,
-      "LSP references",
     },
 
     ["<leader>lf"] = {

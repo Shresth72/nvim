@@ -25,16 +25,72 @@ M.general = {
   },
 
   n = {
+    -- debugger
+    -- ["<C-b>"] = {
+    --   function()
+    --     require("dap").toggle_breakpoint()
+    --   end,
+    --   "Toggle Breakpoint",
+    -- },
+    -- ["<leader>n"] = {
+    --   function()
+    --     require("dap").run_to_cursor()
+    --   end,
+    --   "Run to cursor in debugger",
+    -- },
+    -- ["<space>?"] = {
+    --   function()
+    --     require("dapui").eval(nil, { enter = true })
+    --   end,
+    --   "Eval expression",
+    -- },
+    -- ["<F1>"] = {
+    --   function()
+    --     require("dap").continue()
+    --   end,
+    --   "Continue",
+    -- },
+    -- ["<F2>"] = {
+    --   function()
+    --     require("dap").step_into()
+    --   end,
+    --   "Step into",
+    -- },
+    -- ["<F3>"] = {
+    --   function()
+    --     require("dap").step_over()
+    --   end,
+    --   "Step over",
+    -- },
+    -- ["<F4>"] = {
+    --   function()
+    --     require("dap").step_out()
+    --   end,
+    --   "Step out",
+    -- },
+    -- ["<F5>"] = {
+    --   function()
+    --     require("dap").step_back()
+    --   end,
+    --   "Step back",
+    -- },
+    -- ["<F12>"] = {
+    --   function()
+    --     require("dap").restart()
+    --   end,
+    --   "Restart",
+    -- },
+
     -- navigation
     ["<M-->"] = {
       function()
         require("custom.navigation").back()
-      end
+      end,
     },
     ["<M-=>"] = {
       function()
         require("custom.navigation").forward()
-      end
+      end,
     },
 
     -- edit instances of word
@@ -66,10 +122,10 @@ M.general = {
     -- shortcut for system.out.println()
     ["<leader>p"] = {
       function()
-        local current_line = vim.fn.getline(".")
-        local current_indent = current_line:match("^%s*") or ""
+        local current_line = vim.fn.getline "."
+        local current_indent = current_line:match "^%s*" or ""
 
-        if current_line:match("%s") then
+        if current_line:match "%s" then
           vim.api.nvim_put({ current_indent .. "system.out.println();" }, "l", true, true)
           vim.cmd "normal! k"
         else
@@ -80,7 +136,7 @@ M.general = {
         vim.api.nvim_win_set_cursor(0, { current_row, #current_indent + 19 })
         vim.cmd "startinsert"
       end,
-      "insert system.out.println() and enter insert mode"
+      "insert system.out.println() and enter insert mode",
     },
 
     -- window resize
@@ -107,7 +163,6 @@ M.general = {
     ["<C-a>"] = { "ggVG", "Select all" },
 
     -- line numbers
-    ["<leader>n"] = { "<cmd> set nu! <CR>", "Toggle line number" },
     ["<leader>rn"] = { "<cmd> set rnu! <CR>", "Toggle relative number" },
 
     -- Visual Block mode
@@ -512,8 +567,7 @@ M.blankline = {
     ["<leader>cc"] = {
       function()
         local ok, start =
-            require("indent_blankline.utils").get_current_context(vim.g.indent_blankline_context_patterns,
-              vim.g.indent_blankline_use_treesitter_scope)
+          require("indent_blankline.utils").get_current_context(vim.g.indent_blankline_context_patterns, vim.g.indent_blankline_use_treesitter_scope)
 
         if ok then
           vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { start, 0 })

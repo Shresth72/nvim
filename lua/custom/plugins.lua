@@ -21,37 +21,37 @@ local plugins = {
     end,
   },
   --======== GITHUB COPILOT =========
-  {
-    "github/copilot.vim",
-    lazy = false,
-    config = function() end,
-  },
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    lazy = false,
-    dependencies = {
-      { "github/copilot.vim" },
-      { "nvim-lua/plenary.nvim", branch = "master" },
-    },
-    build = "make tiktoken",
-    opts = {
-      window = {
-        layout = "vertical",
-        width = 40,
-      },
-    },
-    keys = {
-      { "<leader>c",  "<cmd>CopilotChatToggle<CR>",   mode = "n", desc = "Open Copilot Chat" },
-      { "<leader>ze", "<cmd>CopilotChatExplain<CR>",  mode = "v", desc = "Explain Selected Code" },
-      { "<leader>zr", "<cmd>CopilotChatReview<CR>",   mode = "v", desc = "Review Selected Code" },
-      { "<leader>zf", "<cmd>CopilotChatFix<CR>",      mode = "v", desc = "Fix Code Issues" },
-      { "<leader>zo", "<cmd>CopilotChatOptimize<CR>", mode = "v", desc = "Optimize Code" },
-      { "<leader>zd", "<cmd>CopilotChatDocs<CR>",     mode = "v", desc = "Generate Docs" },
-      { "<leader>zt", "<cmd>CopilotChatTests<CR>",    mode = "v", desc = "Generate Tests" },
-      { "<leader>zm", "<cmd>CopilotChatCommit<CR>",   mode = "n", desc = "Generate Commit Message" },
-      { "<leader>zs", "<cmd>CopilotChatCommit<CR>",   mode = "v", desc = "Generate Commit for Selection" },
-    },
-  },
+  -- {
+  --   "github/copilot.vim",
+  --   lazy = false,
+  --   config = function() end,
+  -- },
+  -- {
+  --   "CopilotC-Nvim/CopilotChat.nvim",
+  --   lazy = false,
+  --   dependencies = {
+  --     { "github/copilot.vim" },
+  --     { "nvim-lua/plenary.nvim", branch = "master" },
+  --   },
+  --   build = "make tiktoken",
+  --   opts = {
+  --     window = {
+  --       layout = "vertical",
+  --       width = 40,
+  --     },
+  --   },
+  --   keys = {
+  --     { "<leader>c", "<cmd>CopilotChatToggle<CR>", mode = "n", desc = "Open Copilot Chat" },
+  --     { "<leader>ze", "<cmd>CopilotChatExplain<CR>", mode = "v", desc = "Explain Selected Code" },
+  --     { "<leader>zr", "<cmd>CopilotChatReview<CR>", mode = "v", desc = "Review Selected Code" },
+  --     { "<leader>zf", "<cmd>CopilotChatFix<CR>", mode = "v", desc = "Fix Code Issues" },
+  --     { "<leader>zo", "<cmd>CopilotChatOptimize<CR>", mode = "v", desc = "Optimize Code" },
+  --     { "<leader>zd", "<cmd>CopilotChatDocs<CR>", mode = "v", desc = "Generate Docs" },
+  --     { "<leader>zt", "<cmd>CopilotChatTests<CR>", mode = "v", desc = "Generate Tests" },
+  --     { "<leader>zm", "<cmd>CopilotChatCommit<CR>", mode = "n", desc = "Generate Commit Message" },
+  --     { "<leader>zs", "<cmd>CopilotChatCommit<CR>", mode = "v", desc = "Generate Commit for Selection" },
+  --   },
+  -- },
   --======== MASON PACKAGES =========
   {
     "williamboman/mason.nvim",
@@ -103,13 +103,6 @@ local plugins = {
       require "custom.configs.conform"
     end,
   },
-  -- {
-  --   "jose-elias-alvarez/null-ls.nvim",
-  --   event = "VeryLazy",
-  --   opts = function()
-  --     return require "custom.configs.null-ls"
-  --   end,
-  -- },
   --========== UTILS ============
   {
     "j-hui/fidget.nvim",
@@ -126,7 +119,7 @@ local plugins = {
     keys = {
       "<space>m",
       "<space>j",
-      "<space>s",
+      "<space>sp",
     },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     config = function()
@@ -190,7 +183,7 @@ local plugins = {
     ft = "rust",
     dependencies = "neovim/nvim-lspconfig",
     opts = function()
-      return require "custom.configs.rust-tools"
+      return require "custom.configs.rust"
     end,
     config = function(_, opts)
       require("rust-tools").setup(opts)
@@ -212,9 +205,6 @@ local plugins = {
   {
     "luk400/vim-jukit",
     lazy = true,
-    -- config = function ()
-    --   require("custom.configs.jukit")
-    -- end
   },
   --============= Kubernetes ==============
   {
@@ -255,48 +245,79 @@ local plugins = {
   },
   --=========== Debugger ===============
   {
-    "rcarriga/nvim-dap-ui",
-    event = "VeryLazy",
-    dependencies = "mfussenegger/nvim-dap",
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      "leoluz/nvim-dap-go",
+      "mfussenegger/nvim-dap-python",
+      "rcarriga/nvim-dap-ui",
+      "theHamsta/nvim-dap-virtual-text",
+      "nvim-neotest/nvim-nio",
+      "williamboman/mason.nvim",
+    },
     config = function()
       local dap = require "dap"
-      local dapui = require "dapui"
-      dapui.setup()
-      dap.listeners.after.event_initialized["dapui_config"] = function()
-        dapui.open()
+      local ui = require "dapui"
+
+      require("dapui").setup()
+      require("dap-go").setup()
+      require("dap-python").setup("/usr/bin/python3", {
+        adapter = "debugpy",
+      })
+
+      require("nvim-dap-virtual-text").setup {
+        display_callback = function(variable)
+          local name = string.lower(variable.name)
+          local value = string.lower(variable.value)
+          if name:match "secret" or name:match "api" or value:match "secret" or value:match "api" then
+            return "*****"
+          end
+
+          if #variable.value > 25 then
+            return " " .. string.sub(variable.value, 1, 15) .. "... "
+          end
+
+          return " " .. variable.value
+        end,
+      }
+
+      dap.configurations.python = {
+        {
+          type = "python",
+          request = "launch",
+          name = "Launch file",
+          program = "${file}",
+          pythonPath = vim.fn.getcwd() .. "/.venv/bin/python",
+          stopOnEntry = true,
+          console = "integratedTerminal",
+        },
+      }
+
+      dap.configurations.go = {
+        {
+          type = "go",
+          name = "Debug",
+          request = "launch",
+          program = "${file}",
+        },
+      }
+
+      dap.listeners.before.attach.dapui_config = function()
+        ui.open()
       end
-      dap.listeners.before.event_terminated["dapui_config"] = function()
-        dapui.close()
+      dap.listeners.before.launch.dapui_config = function()
+        ui.open()
       end
-      dap.listeners.before.event_exited["dapui_config"] = function()
-        dapui.close()
+      dap.listeners.before.event_terminated.dapui_config = function()
+        ui.close()
       end
+      dap.listeners.before.event_exited.dapui_config = function()
+        ui.close()
+      end
+
+      vim.fn.sign_define("DapBreakpoint", { text = "🔴", texthl = "DiagnosticError", linehl = "", numhl = "" })
+      -- vim.fn.sign_define("DapLogPoint", { text = "◆", texthl = "DiagnosticInfo", linehl = "", numhl = "" })
+      -- vim.fn.sign_define("DapStopped", { text = "→", texthl = "DiagnosticWarn", linehl = "", numhl = "" })
     end,
-  },
-  {
-    "nvim-neotest/nvim-nio",
-  },
-  {
-    "jay-babu/mason-nvim-dap.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      "williamboman/mason.nvim",
-      "mfussenegger/nvim-dap",
-      "nvim-neotest/nvim-nio",
-    },
-    opts = {
-      handlers = {},
-    },
-  },
-  {
-    "mfussenegger/nvim-dap",
-    config = function(_, _)
-      require("core.utils").load_mappings "dap"
-    end,
-  },
-  {
-    "folke/neodev.nvim",
-    opts = {},
   },
 }
 return plugins

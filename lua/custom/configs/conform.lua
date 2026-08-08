@@ -11,11 +11,16 @@ conform.setup {
       command = "uncrustify",
       args = {
         "-c",
-        vim.fn.expand("~/.config/uncrustify/uncrustify.cfg"),
+        vim.fn.expand "~/.config/uncrustify/uncrustify.cfg",
         "--no-backup",
         "--replace",
         "$FILENAME",
       },
+      stdin = false,
+    },
+    gdformat = {
+      command = "gdformat",
+      args = { "$FILENAME" },
       stdin = false,
     },
   },
@@ -23,8 +28,10 @@ conform.setup {
   formatters_by_ft = {
     c = { "uncrustify" },
     cpp = { "uncrustify" },
+    -- cpp = { "clang-format" },
 
     lua = { "stylua" },
+    gdscript = { "gdformat" },
     javascript = { "prettier" },
     javascriptreact = { "prettier" },
     typescript = { "prettier" },

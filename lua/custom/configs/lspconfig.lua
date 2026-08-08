@@ -43,6 +43,12 @@ end
 --   filetypes = { "python" },
 -- }
 
+lspconfig.gdscript.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  cmd = { "nc", "172.28.64.1", "6005" }, -- replace with your IP
+}
+
 lspconfig.pylsp.setup {
   on_attach = on_attach,
   capabilities = capabilities,
@@ -126,6 +132,16 @@ lspconfig.hls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   filetypes = { "haskell", "lhaskell", "cabal" },
+}
+
+lspconfig.ols.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = { "odin" },
+  root_dir = util.root_pattern("ols.json", ".git"),
+  init_options = {
+    odin_command = "/home/shres/Odin/odin",
+  },
 }
 
 lspconfig.yamlls.setup {

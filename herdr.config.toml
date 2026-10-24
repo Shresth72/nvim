@@ -11,6 +11,7 @@ name = "catppuccin"
 auto_switch = false
 
 [ui]
+host_cursor = "native"
 status_indicators = "dots"
 tab_bar_position = "bottom"
 prompt_new_workspace_name = true

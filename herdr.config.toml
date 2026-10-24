@@ -1,0 +1,36 @@
+onboarding = false
+
+[ui.sound]
+enabled = false
+
+[ui.toast]
+delivery = "herdr"
+
+[theme]
+name = "catppuccin"
+auto_switch = false
+
+[ui]
+status_indicators = "dots"
+tab_bar_position = "bottom"
+prompt_new_workspace_name = true
+
+[ui.sidebar.spaces]
+rows = [["state_icon", "workspace"]]
+
+[keys]
+# Tab Navigation
+next_tab = "shift+right"
+previous_tab = "shift+left"
+
+# Workspace Navigation
+next_workspace = "alt+down"
+previous_workspace = "alt+up"
+switch_workspace = "alt+1..9"
+
+# New Workspace
+new_workspace = "prefix+n"
+
+# Agent Navigation
+next_agent = "alt+shift+down"
+previous_agent = "alt+shift+up"

@@ -10,6 +10,10 @@ local plugins = {
     "wbthomason/packer.nvim",
   },
   {
+    "Shresth72/navigation.nvim",
+    lazy = false,
+  },
+  {
     "echasnovski/mini.icons",
     version = false,
   },

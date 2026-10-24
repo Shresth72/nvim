@@ -82,16 +82,16 @@ M.general = {
     -- },
 
     -- navigation
-    ["<M-->"] = {
-      function()
-        require("custom.navigation").back()
-      end,
-    },
-    ["<M-=>"] = {
-      function()
-        require("custom.navigation").forward()
-      end,
-    },
+    -- ["<M-->"] = {
+    --   function()
+    --     require("custom.navigation").back()
+    --   end,
+    -- },
+    -- ["<M-=>"] = {
+    --   function()
+    --     require("custom.navigation").forward()
+    --   end,
+    -- },
 
     -- edit instances of word
     ["<leader>r"] = {
@@ -306,29 +306,37 @@ M.lspconfig = {
   -- See `<cmd> :help vim.lsp.*` for documentation on any of the below functions
 
   n = {
-    ["gD"] = {
-      function()
-        require("custom.navigation").record()
-        vim.lsp.buf.declaration()
-      end,
-      "LSP declaration",
-    },
-
-    ["gd"] = {
-      function()
-        require("custom.navigation").record()
-        vim.lsp.buf.definition()
-      end,
-      "LSP definition",
-    },
-
-    ["gr"] = {
-      function()
-        require("custom.navigation").record()
-        vim.lsp.buf.references()
-      end,
-      "LSP references",
-    },
+    -- ["gD"] = {
+    --   function()
+    --     require("custom.navigation").record()
+    --     vim.lsp.buf.declaration()
+    --   end,
+    --   "LSP declaration",
+    -- },
+    --
+    -- ["gd"] = {
+    --   function()
+    --     require("custom.navigation").record()
+    --     vim.lsp.buf.definition()
+    --   end,
+    --   "LSP definition",
+    -- },
+    --
+    -- ["gr"] = {
+    --   function()
+    --     require("custom.navigation").record()
+    --     vim.lsp.buf.references()
+    --   end,
+    --   "LSP references",
+    -- },
+    --
+    -- ["gi"] = {
+    --   function()
+    --     require("custom.navigation").record()
+    --     vim.lsp.buf.implementation()
+    --   end,
+    --   "LSP implementation",
+    -- },
 
     ["K"] = {
       function()
@@ -336,15 +344,6 @@ M.lspconfig = {
       end,
       "LSP hover",
     },
-
-    ["gi"] = {
-      function()
-        require("custom.navigation").record()
-        vim.lsp.buf.implementation()
-      end,
-      "LSP implementation",
-    },
-
     ["<leader>ls"] = {
       function()
         vim.lsp.buf.signature_help()

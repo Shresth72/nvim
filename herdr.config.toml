@@ -7,11 +7,21 @@ enabled = false
 delivery = "herdr"
 
 [theme]
-name = "catppuccin"
+name = "rose-pine"
 auto_switch = false
+
+[ui.toast.clipboard]
+enabled = true
+position = "top-right"
 
 [ui]
 host_cursor = "native"
+# host_cursor = "drawn"
+
+pane_gaps = false
+pane_borders = "off"
+pane_outer_borders = false
+
 status_indicators = "dots"
 tab_bar_position = "bottom"
 prompt_new_workspace_name = true

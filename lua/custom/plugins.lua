@@ -24,38 +24,21 @@ local plugins = {
       require "custom.configs.lspconfig"
     end,
   },
-  --======== GITHUB COPILOT =========
-  -- {
-  --   "github/copilot.vim",
-  --   lazy = false,
-  --   config = function() end,
-  -- },
-  -- {
-  --   "CopilotC-Nvim/CopilotChat.nvim",
-  --   lazy = false,
-  --   dependencies = {
-  --     { "github/copilot.vim" },
-  --     { "nvim-lua/plenary.nvim", branch = "master" },
-  --   },
-  --   build = "make tiktoken",
-  --   opts = {
-  --     window = {
-  --       layout = "vertical",
-  --       width = 40,
-  --     },
-  --   },
-  --   keys = {
-  --     { "<leader>c", "<cmd>CopilotChatToggle<CR>", mode = "n", desc = "Open Copilot Chat" },
-  --     { "<leader>ze", "<cmd>CopilotChatExplain<CR>", mode = "v", desc = "Explain Selected Code" },
-  --     { "<leader>zr", "<cmd>CopilotChatReview<CR>", mode = "v", desc = "Review Selected Code" },
-  --     { "<leader>zf", "<cmd>CopilotChatFix<CR>", mode = "v", desc = "Fix Code Issues" },
-  --     { "<leader>zo", "<cmd>CopilotChatOptimize<CR>", mode = "v", desc = "Optimize Code" },
-  --     { "<leader>zd", "<cmd>CopilotChatDocs<CR>", mode = "v", desc = "Generate Docs" },
-  --     { "<leader>zt", "<cmd>CopilotChatTests<CR>", mode = "v", desc = "Generate Tests" },
-  --     { "<leader>zm", "<cmd>CopilotChatCommit<CR>", mode = "n", desc = "Generate Commit Message" },
-  --     { "<leader>zs", "<cmd>CopilotChatCommit<CR>", mode = "v", desc = "Generate Commit for Selection" },
-  --   },
-  -- },
+  --======== IMAGE RENDERING =========
+  {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    opts = {
+      image = {
+        force = true,
+        doc = {
+          enabled = true,
+          inline = true,
+        },
+      },
+    },
+  },
   --======== MASON PACKAGES =========
   {
     "williamboman/mason.nvim",
@@ -247,6 +230,38 @@ local plugins = {
       return require "custom.configs.todoconfig"
     end,
   },
+  --======== GITHUB COPILOT =========
+  -- {
+  --   "github/copilot.vim",
+  --   lazy = false,
+  --   config = function() end,
+  -- },
+  -- {
+  --   "CopilotC-Nvim/CopilotChat.nvim",
+  --   lazy = false,
+  --   dependencies = {
+  --     { "github/copilot.vim" },
+  --     { "nvim-lua/plenary.nvim", branch = "master" },
+  --   },
+  --   build = "make tiktoken",
+  --   opts = {
+  --     window = {
+  --       layout = "vertical",
+  --       width = 40,
+  --     },
+  --   },
+  --   keys = {
+  --     { "<leader>c", "<cmd>CopilotChatToggle<CR>", mode = "n", desc = "Open Copilot Chat" },
+  --     { "<leader>ze", "<cmd>CopilotChatExplain<CR>", mode = "v", desc = "Explain Selected Code" },
+  --     { "<leader>zr", "<cmd>CopilotChatReview<CR>", mode = "v", desc = "Review Selected Code" },
+  --     { "<leader>zf", "<cmd>CopilotChatFix<CR>", mode = "v", desc = "Fix Code Issues" },
+  --     { "<leader>zo", "<cmd>CopilotChatOptimize<CR>", mode = "v", desc = "Optimize Code" },
+  --     { "<leader>zd", "<cmd>CopilotChatDocs<CR>", mode = "v", desc = "Generate Docs" },
+  --     { "<leader>zt", "<cmd>CopilotChatTests<CR>", mode = "v", desc = "Generate Tests" },
+  --     { "<leader>zm", "<cmd>CopilotChatCommit<CR>", mode = "n", desc = "Generate Commit Message" },
+  --     { "<leader>zs", "<cmd>CopilotChatCommit<CR>", mode = "v", desc = "Generate Commit for Selection" },
+  --   },
+  -- },
   --=========== Debugger ===============
   {
     "mfussenegger/nvim-dap",

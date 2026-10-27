@@ -4,13 +4,14 @@
 # ENVIRONMENT
 export LOCAL_DEV=true
 export DESKTOP="/mnt/c/Users/Slim 5/Desktop/"
+export PATH="$HOME/.local/bin:$PATH"
 
 
 # Shell integrations
 # eval "$(fzf --zsh)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# eval "$(zoxide init zsh)"
-# eval "$(zoxide init --cmd cd zsh)"
+eval "$(zoxide init zsh)"
+eval "$(zoxide init --cmd cd zsh)"
 
 # -----ZINIT CONFIG-----
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -52,7 +53,7 @@ autoload -U compinit && compinit
 zinit cdreplay -q
 
 # Keybindings
-# bindkey -e
+bindkey -e
 
 function accept-or-history-up() {
   if [[ -n $ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE ]]; then
@@ -63,8 +64,30 @@ function accept-or-history-up() {
 }
 zle -N accept-or-history-up
 
-bindkey '^[[A' history-search-backward  # Up arrow
-bindkey '^[[B' history-search-forward   # Down arrow
+typeset -g _hp_len _hp_last
+_history_prefix_search() {
+  local dir=$1
+  if [[ $LASTWIDGET == _history_prefix_up || $LASTWIDGET == _history_prefix_down ]] &&
+     [[ $BUFFER == $_hp_last ]]; then
+    CURSOR=$_hp_len
+  else
+    _hp_len=$CURSOR
+  fi
+  zle history-beginning-search-$dir
+  _hp_last=$BUFFER
+  zle end-of-line
+}
+_history_prefix_up()   { _history_prefix_search backward }
+_history_prefix_down() { _history_prefix_search forward }
+zle -N _history_prefix_up
+zle -N _history_prefix_down
+
+# Two encodings are bound because terminals send either CSI (^[[A) or
+# SS3 (^[OA, "application cursor keys" mode) for the arrow keys.
+bindkey '^[[A' _history_prefix_up    # Up arrow (CSI)
+bindkey '^[OA' _history_prefix_up    # Up arrow (SS3 / app mode)
+bindkey '^[[B' _history_prefix_down  # Down arrow (CSI)
+bindkey '^[OB' _history_prefix_down  # Down arrow (SS3 / app mode)
 # bindkey '^[[C' autosuggest-accept       # Right arrow
 
 # History
@@ -79,6 +102,9 @@ setopt hist_ignore_all_dups
 setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
+
+# LS colors: directories = light blue
+export LS_COLORS="di=1;94"
 
 # ZStyle config
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
@@ -95,7 +121,15 @@ alias p3='python3.12'
 alias la='ls -a --color'
 alias vim='nvim'
 alias c='clear'
+alias desktop='cd $DESKTOP'
+alias de='cd $DESKTOP'
 # alias gcloud='~/.config/google-cloud-sdk/bin/gcloud'
+
+# Wezterm
+if [ -n "$WEZTERM_PANE" ]; then
+    export TERM=xterm-kitty
+    export TERMINAL_EMULATOR=wezterm
+fi
 
 # Tmux conf
 
@@ -104,3 +138,15 @@ alias c='clear'
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# bun completions
+[ -s "/home/shres/.bun/_bun" ] && source "/home/shres/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
+export PATH="$HOME/Odin:$PATH"
+
+# opencode
+export PATH=/home/shres/.opencode/bin:$PATH
